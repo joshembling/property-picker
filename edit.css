@@ -1,0 +1,17 @@
+.pill-wrapper {
+  display: inline-block;
+  margin-bottom: 0.5rem;
+  overflow-wrap: anywhere;
+}
+
+.pill {
+  all: unset;
+  white-space: nowrap;
+  text-align: center;
+  border-radius: 999px;
+  padding: 0.3rem 0.5rem;
+  font-size: 0.85rem;
+  color: #111;
+  margin-right: 0.75rem;
+  border: none;
+}

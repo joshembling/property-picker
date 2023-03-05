@@ -1,0 +1,119 @@
+<html>
+  <link rel="stylesheet" href="app.css" />
+  <body>
+    <div id="user-form">
+      <h1><span class="house">&#x1F3E0;</span> Property Picker (Zoopla)</h1>
+      <p>
+        Just enter your basic details. Your annual and monthly salaries are
+        enough, but you can also enter your deposit amount and ideal mortgage
+        interest rate for improved results if browsing for sale properties.
+      </p>
+      <p>
+        You'll still see all regular listings on zoopla.co.uk, but now your
+        property matches are much easier to find!
+      </p>
+      <div class="applicant-title">
+        <h4>Applicant 1:</h4>
+      </div>
+      <label for="annual_salary_0">Annual salary:</label>
+      <span class="icon gbp">
+        <input
+          type="number"
+          id="annual_salary_0"
+          name="annual_salary_0"
+          class="gbp"
+      /></span>
+
+      <label for="monthly_salary_after_tax_0">Monthly salary after tax:</label>
+      <span class="icon gbp">
+        <input
+          type="number"
+          id="monthly_salary_after_tax_0"
+          name="monthly_salary_after_tax_0"
+          class="gbp"
+      /></span>
+
+      <label for="deposit_value_0"
+        >Deposit value (or current property equity):</label
+      >
+      <span class="icon gbp">
+        <input
+          type="number"
+          id="deposit_value_0"
+          name="deposit_value_0"
+          class="gbp"
+      /></span>
+
+      <label for="mortgage_percentage">Interest rate (%):</label>
+      <span class="icon percent">
+        <input
+          type="number"
+          id="mortgage_percentage"
+          name="mortgage_percentage"
+          class="percent"
+          min="0.5"
+          max="15"
+      /></span>
+
+      <label for="repayment_term">Repayment term (years):</label>
+      <span class="icon year">
+        <input
+          type="number"
+          id="repayment_term"
+          name="repayment_term"
+          class="percent"
+          value="25"
+          min="10"
+          max="35"
+      /></span>
+
+      <div class="applicant-title">
+        <h4>Applicant 2:</h4>
+      </div>
+      <label for="annual_salary_1">Annual salary:</label>
+      <span class="icon gbp">
+        <input
+          type="number"
+          id="annual_salary_1"
+          name="annual_salary_1"
+          class="gbp"
+      /></span>
+
+      <label for="monthly_salary_after_tax_1">Monthly salary after tax:</label>
+      <span class="icon gbp">
+        <input
+          type="number"
+          id="monthly_salary_after_tax_1"
+          name="monthly_salary_after_tax_1"
+          class="gbp"
+      /></span>
+
+      <label for="deposit_value_1"
+        >Deposit value (or current property equity):</label
+      >
+      <span class="icon gbp">
+        <input
+          type="number"
+          id="deposit_value_1"
+          name="deposit_value_1"
+          class="gbp"
+      /></span>
+    </div>
+
+    <!--<p>
+      Max percentage (%) of income you are willing to spend your monthly
+      mortgage/rent payments: <br />
+      <input
+        id="affordability_range"
+        type="range"
+        min="10"
+        max="50"
+        step="2"
+      /><output id="affordability_value"></output>%
+    </p>-->
+
+    <button id="update">Update details</button>
+
+    <script src="app.js"></script>
+  </body>
+</html>
