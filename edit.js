@@ -5,12 +5,12 @@ function checkForNextUrl() {
   if (window.location.href !== previousUrl) {
     previousUrl = window.location.href;
     if (previousUrl.includes("__next")) {
-      setTimeout(checkForNextUrl, 500);
+      setTimeout(checkForNextUrl, 100);
     } else {
       window.location.reload();
     }
   } else {
-    setTimeout(checkForNextUrl, 500);
+    setTimeout(checkForNextUrl, 100);
   }
 }
 checkForNextUrl();

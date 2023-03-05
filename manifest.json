@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Property Picker (Zoopla)",
   "description": "Affordability information on all listings. Currently available when browsing on zoopla.co.uk.",
-  "version": "1.1",
+  "version": "3",
   "host_permissions": ["https://zoopla.co.uk/*"],
   "action": {
     "default_popup": "index.html",
