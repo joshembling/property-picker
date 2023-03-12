@@ -1,9 +1,12 @@
 {
   "manifest_version": 3,
-  "name": "Property Picker (Zoopla)",
-  "description": "Affordability information on all listings. Currently available when browsing on zoopla.co.uk.",
-  "version": "3.1",
-  "host_permissions": ["https://zoopla.co.uk/*"],
+  "name": "Property Picker (Zoopla & Rightmove)",
+  "description": "Affordability information on all listings. Currently available when browsing on Zoopla and Rightmove.",
+  "version": "3.2",
+  "host_permissions": [
+    "https://zoopla.co.uk/*",
+    "https://www.rightmove.co.uk/*"
+  ],
   "action": {
     "default_popup": "index.html",
     "default_icon": "icon_purple.png"
@@ -11,7 +14,10 @@
   "permissions": ["storage", "tabs"],
   "content_scripts": [
     {
-      "matches": ["https://www.zoopla.co.uk/*"],
+      "matches": [
+        "https://www.zoopla.co.uk/*",
+        "https://www.rightmove.co.uk/*"
+      ],
       "js": ["edit.js"],
       "css": ["edit.css"],
       "run_at": "document_end"

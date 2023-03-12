@@ -1,19 +1,32 @@
 //console.log(chrome.storage.local.get());
 
 let previousUrl = window.location.href;
-function checkForNextUrl() {
+function checkZooplaForNextUrl() {
   if (window.location.href !== previousUrl) {
     previousUrl = window.location.href;
     if (previousUrl.includes("__next")) {
-      setTimeout(checkForNextUrl, 100);
+      setTimeout(checkZooplaForNextUrl, 100);
     } else {
       window.location.reload();
     }
   } else {
-    setTimeout(checkForNextUrl, 100);
+    setTimeout(checkZooplaForNextUrl, 100);
   }
 }
-checkForNextUrl();
+function checkRightMoveForNextUrl() {
+  if (window.location.href !== previousUrl) {
+    previousUrl = window.location.href;
+    window.location.reload();
+  } else {
+    setTimeout(checkRightMoveForNextUrl, 300);
+  }
+}
+
+if (previousUrl.includes("zoopla")) {
+  checkZooplaForNextUrl();
+} else if (previousUrl.includes("rightmove")) {
+  checkRightMoveForNextUrl();
+}
 
 class Calculations {
   monthlyPayment(price, interestRate, term) {
@@ -71,40 +84,6 @@ class Calculations {
     };
     return { ...amounts, ...percentage };
   }
-}
-
-const calculations = new Calculations();
-
-class ZooplaListings {
-  constructor(listing) {
-    this.listing = listing;
-  }
-
-  getChildElements() {
-    return this.listing.querySelectorAll("*");
-  }
-
-  changeListingTextToBlack() {
-    this.getChildElements().forEach((child) => {
-      child.style.color = "black";
-    });
-  }
-
-  getListingPrice() {
-    let price = this.listing.querySelector(
-      'p[data-testid="listing-price"]'
-    ).textContent;
-    price = price.replace("£", "");
-    price = price.replace(new RegExp(",", "g"), "");
-
-    return parseInt(price);
-  }
-
-  getListingBackgroundElements() {
-    return this.listing.querySelectorAll(
-      "div > div > div:first-of-type > div:nth-child(2) > div:first-of-type > a:first-of-type > div:first-of-type"
-    );
-  }
 
   getChromeStorageApplicantValues(key1, key2, message) {
     return parseInt(key1) && parseInt(key2)
@@ -158,137 +137,279 @@ class ZooplaListings {
   }
 }
 
-const listings = document.querySelectorAll(
+const calculations = new Calculations();
+
+class PropertyListings {
+  constructor() {
+    this.pills = [
+      {
+        text: "⛔️ Out of reach",
+        colour: "#fe7f7f",
+      },
+      {
+        text: "💭 Possible but restrictive",
+        colour: "#fba436",
+      },
+      {
+        text: "👀 Within reach",
+        colour: "#fcfbb8",
+      },
+      {
+        text: "✅ Affordable",
+        colour: "#7cffa7",
+      },
+    ];
+
+    this.percentage;
+  }
+
+  getCalculations(items) {
+    return {
+      combinedAnnualSalary: calculations.getCombinedAnnualSalary(items),
+      combinedMonthlySalary: calculations.getCombinedMonthlySalary(items),
+      combinedDeposit: calculations.getCombinedDeposit(items),
+      mortgagePercentage: calculations.getMortgagePercentage(items),
+      repaymentTerm: calculations.getRepaymentTerm(items),
+    };
+  }
+
+  getPercentage(rentAffordability, mortgageAffordability) {
+    if (window.location.href.indexOf("to-rent") > -1) {
+      return (this.percentage = rentAffordability.percentage);
+    } else {
+      return (this.percentage = mortgageAffordability.percentage);
+    }
+  }
+
+  getAffordabilityPercentage(index, pill) {
+    if (index === 1)
+      pill.textContent = `Affordability rating: ${
+        this.percentage <= 0
+          ? "0%"
+          : this.percentage >= 100
+          ? "100%"
+          : this.percentage + "%"
+      }`;
+  }
+
+  getEstimatedMonthlyPayment(index, mortgageAffordability, pill) {
+    if (index === 2)
+      if (mortgageAffordability.monthlyPayment <= 0) {
+        pill.remove();
+      } else {
+        pill.textContent = `Est. monthly payment: £${mortgageAffordability.monthlyPayment.toFixed(
+          2
+        )}`;
+      }
+  }
+
+  getExtraAnnualIncomeNeeded(index, rentAffordability, pill) {
+    if (index === 3)
+      if (rentAffordability.targetSalaryNeeded !== null) {
+        pill.textContent = `Extra annual income needed: +£${rentAffordability.targetSalaryNeeded.toLocaleString(
+          "en-US",
+          { maximumFractionDigits: 0 }
+        )}`;
+      } else {
+        pill.remove();
+      }
+  }
+
+  colourPills(pill) {
+    if (this.percentage < 50) {
+      pill.style.background = this.pills[0].colour;
+      pill.textContent = this.pills[0].text;
+    } else if (this.percentage >= 50 && this.percentage < 65) {
+      pill.style.background = this.pills[1].colour;
+      pill.textContent = this.pills[1].text;
+    } else if (this.percentage >= 65 && this.percentage < 70) {
+      pill.style.background = this.pills[2].colour;
+      pill.textContent = this.pills[2].text;
+    } else {
+      pill.style.background = this.pills[3].colour;
+      pill.textContent = this.pills[3].text;
+    }
+  }
+
+  colourBackgrounds(backgrounds) {
+    backgrounds.forEach((bg) => {
+      bg.style.color = "#111 !important";
+
+      if (this.percentage < 50) {
+        bg.style.background = this.pills[0].colour;
+      } else if (this.percentage >= 50 && this.percentage < 65) {
+        bg.style.background = this.pills[1].colour;
+      } else if (this.percentage >= 65 && this.percentage < 70) {
+        bg.style.background = this.pills[2].colour;
+      } else {
+        bg.style.background = this.pills[3].colour;
+      }
+    });
+  }
+
+  formatListings(listing, items, price, backgrounds) {
+    const listingDataCalculations = this.getCalculations(items);
+
+    if (!isNaN(price)) {
+      const mortgageAffordability = calculations.getMortgageAffordability(
+        price,
+        listingDataCalculations.combinedDeposit,
+        listingDataCalculations.mortgagePercentage,
+        listingDataCalculations.repaymentTerm,
+        listingDataCalculations.combinedMonthlySalary,
+        0
+      );
+      const rentAffordability = calculations.getRentAffordability(
+        price,
+        listingDataCalculations.combinedMonthlySalary,
+        0
+      );
+
+      if (
+        listingDataCalculations.combinedAnnualSalary !== undefined &&
+        listingDataCalculations.combinedMonthlySalary !== undefined
+      ) {
+        const wrapper = calculations.createElement("div", "pill-wrapper");
+        listing.prepend(wrapper);
+
+        this.pills.map((pill, index) => {
+          let p = calculations.createElement("div", "pill");
+          wrapper.appendChild(p);
+          p.style.fontSize = "0.85rem";
+
+          if (window.location.href.indexOf("to-rent") > -1) {
+            index === 2 ? p.remove() : "";
+          } else {
+            index === 3 ? p.remove() : "";
+          }
+
+          this.getPercentage(rentAffordability, mortgageAffordability);
+          this.colourPills(p);
+
+          this.getAffordabilityPercentage(index, p);
+          this.getEstimatedMonthlyPayment(index, mortgageAffordability, p);
+          this.getExtraAnnualIncomeNeeded(index, rentAffordability, p);
+        });
+
+        this.colourBackgrounds(backgrounds);
+      }
+    }
+  }
+}
+
+class RightMoveListings {
+  constructor(listing) {
+    this.listing = listing;
+  }
+
+  getChildElements() {
+    return this.listing.querySelectorAll(".propertyCard-content *");
+  }
+
+  changeListingTextToBlack() {
+    this.getChildElements().forEach((child) => {
+      child.style.color = "black";
+    });
+  }
+
+  getListingPrice() {
+    let price = this.listing.querySelector(
+      ".propertyCard-priceValue"
+    ).textContent;
+
+    price = price.replace("£", "");
+    price = price.replace(new RegExp(",", "g"), "");
+
+    return parseInt(price);
+  }
+
+  getListingBackgroundElements() {
+    return this.listing.querySelectorAll(".propertyCard-content");
+  }
+
+  getListingFooterElements() {
+    return this.listing.querySelectorAll(".propertyCard-content div");
+  }
+}
+
+const right_move_listings = document.querySelectorAll(
+  "#l-searchResults > div > .l-searchResult "
+);
+
+right_move_listings.forEach((listing) => {
+  listing.style.margin = "1.5rem 0";
+  const rightMoveListings = new RightMoveListings(listing);
+  const listingData = new PropertyListings();
+
+  rightMoveListings.changeListingTextToBlack();
+  const price = rightMoveListings.getListingPrice();
+  const backgrounds = rightMoveListings.getListingBackgroundElements();
+  const footerBackgrounds = rightMoveListings.getListingFooterElements();
+
+  chrome.storage.local.get(null, function (items) {
+    listingData.formatListings(listing, items, price, backgrounds);
+
+    footerBackgrounds.forEach((bg) => {
+      bg.style.color = "#111 !important";
+
+      if (listingData.percentage < 50) {
+        bg.style.background = listingData.pills[0].colour;
+      } else if (listingData.percentage >= 50 && listingData.percentage < 65) {
+        bg.style.background = listingData.pills[1].colour;
+      } else if (listingData.percentage >= 65 && listingData.percentage < 70) {
+        bg.style.background = listingData.pills[2].colour;
+      } else {
+        bg.style.background = listingData.pills[3].colour;
+      }
+    });
+  });
+});
+
+class ZooplaListings {
+  constructor(listing) {
+    this.listing = listing;
+  }
+
+  getChildElements() {
+    return this.listing.querySelectorAll("*");
+  }
+
+  changeListingTextToBlack() {
+    this.getChildElements().forEach((child) => {
+      child.style.color = "black";
+    });
+  }
+
+  getListingPrice() {
+    let price = this.listing.querySelector(
+      'p[data-testid="listing-price"]'
+    ).textContent;
+    price = price.replace("£", "");
+    price = price.replace(new RegExp(",", "g"), "");
+
+    return parseInt(price);
+  }
+
+  getListingBackgroundElements() {
+    return this.listing.querySelectorAll(
+      "div > div > div:first-of-type > div:nth-child(2) > div:first-of-type > a:first-of-type > div:first-of-type"
+    );
+  }
+}
+
+const zoopla_listings = document.querySelectorAll(
   'div[data-testid="regular-listings"] > div[id^="listing"]'
 );
 
-const pills = [
-  {
-    text: "⛔️ Out of reach",
-    colour: "#fe7f7f",
-  },
-  {
-    text: "💭 Possible but restrictive",
-    colour: "#fba436",
-  },
-  {
-    text: "👀 Within reach",
-    colour: "#fcfbb8",
-  },
-  {
-    text: "✅ Affordable",
-    colour: "#7cffa7",
-  },
-];
-
-listings.forEach((listing) => {
+zoopla_listings.forEach((listing) => {
   const zooplaListings = new ZooplaListings(listing);
+  const listingData = new PropertyListings();
 
   zooplaListings.changeListingTextToBlack();
   const price = zooplaListings.getListingPrice();
   const backgrounds = zooplaListings.getListingBackgroundElements();
 
   chrome.storage.local.get(null, function (items) {
-    const combinedAnnualSalary = zooplaListings.getCombinedAnnualSalary(items);
-    const combinedMonthlySalary =
-      zooplaListings.getCombinedMonthlySalary(items);
-    const combinedDeposit = zooplaListings.getCombinedDeposit(items);
-    const mortgagePercentage = zooplaListings.getMortgagePercentage(items);
-    const repaymentTerm = zooplaListings.getRepaymentTerm(items);
-
-    if (!isNaN(price)) {
-      const mortgageAffordability = calculations.getMortgageAffordability(
-        price,
-        combinedDeposit,
-        mortgagePercentage,
-        repaymentTerm,
-        combinedMonthlySalary,
-        0
-      );
-      const rentAffordability = calculations.getRentAffordability(
-        price,
-        combinedMonthlySalary,
-        0
-      );
-
-      if (
-        combinedAnnualSalary !== undefined &&
-        combinedMonthlySalary !== undefined
-      ) {
-        const wrapper = document.createElement("div");
-        wrapper.classList.add("pill-wrapper");
-        listing.prepend(wrapper);
-
-        pills.map((pill, index) => {
-          let p = zooplaListings.createElement("div", "pill");
-          wrapper.appendChild(p);
-
-          if (window.location.href.indexOf("to-rent") > -1) {
-            percentage = rentAffordability.percentage;
-            index === 2 ? p.remove() : "";
-          } else {
-            percentage = mortgageAffordability.percentage;
-            index === 3 ? p.remove() : "";
-          }
-
-          //if (index === 0)
-          if (percentage < 50) {
-            p.style.background = pills[0].colour;
-            p.textContent = pills[0].text;
-          } else if (percentage >= 50 && percentage < 65) {
-            p.style.background = pills[1].colour;
-            p.textContent = pills[1].text;
-          } else if (percentage >= 65 && percentage < 70) {
-            p.style.background = pills[2].colour;
-            p.textContent = pills[2].text;
-          } else {
-            p.style.background = pills[3].colour;
-            p.textContent = pills[3].text;
-          }
-
-          if (index === 1)
-            p.textContent = `Affordability rating: ${
-              percentage <= 0
-                ? "0%"
-                : percentage >= 100
-                ? "100%"
-                : percentage + "%"
-            }`;
-
-          if (index === 2)
-            if (mortgageAffordability.monthlyPayment <= 0) {
-              p.remove();
-            } else {
-              p.textContent = `Est. monthly payment: £${mortgageAffordability.monthlyPayment.toFixed(
-                2
-              )}`;
-            }
-
-          if (index === 3)
-            if (rentAffordability.targetSalaryNeeded !== null) {
-              p.textContent = `Extra annual income needed: +£${rentAffordability.targetSalaryNeeded.toLocaleString(
-                "en-US",
-                { maximumFractionDigits: 0 }
-              )}`;
-            } else {
-              p.remove();
-            }
-        });
-
-        backgrounds.forEach((bg) => {
-          bg.style.color = "#111 !important";
-
-          if (percentage < 50) {
-            bg.style.background = pills[0].colour;
-          } else if (percentage >= 50 && percentage < 65) {
-            bg.style.background = pills[1].colour;
-          } else if (percentage >= 65 && percentage < 70) {
-            bg.style.background = pills[2].colour;
-          } else {
-            bg.style.background = pills[3].colour;
-          }
-        });
-      }
-    }
+    listingData.formatListings(listing, items, price, backgrounds);
   });
 });
