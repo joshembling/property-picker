@@ -345,6 +345,7 @@ right_move_listings.forEach((listing) => {
 
   rightMoveListings.changeListingTextToBlack();
   const price = rightMoveListings.getListingPrice();
+  console.log(price);
   const backgrounds = rightMoveListings.getListingBackgroundElements();
   const footerBackgrounds = rightMoveListings.getListingFooterElements();
 
@@ -360,7 +361,7 @@ right_move_listings.forEach((listing) => {
         bg.style.background = listingData.pills[1].colour;
       } else if (listingData.percentage >= 65 && listingData.percentage < 70) {
         bg.style.background = listingData.pills[2].colour;
-      } else {
+      } else if (listingData.percentage >= 70) {
         bg.style.background = listingData.pills[3].colour;
       }
     });
