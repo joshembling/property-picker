@@ -2,11 +2,8 @@
   "manifest_version": 3,
   "name": "Property Picker (Zoopla & Rightmove)",
   "description": "Affordability information on all listings. Currently available on Zoopla and Rightmove.",
-  "version": "3.22",
-  "host_permissions": [
-    "https://zoopla.co.uk/*",
-    "https://www.rightmove.co.uk/*"
-  ],
+  "version": "3.23",
+  "host_permissions": ["https://zoopla.co.uk/*", "https://rightmove.co.uk/*"],
   "action": {
     "default_popup": "index.html",
     "default_icon": "icon_purple.png"
