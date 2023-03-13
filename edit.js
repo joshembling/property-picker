@@ -14,11 +14,13 @@ function checkZooplaForNextUrl() {
   }
 }
 function checkRightMoveForNextUrl() {
-  if (window.location.href !== previousUrl) {
-    previousUrl = window.location.href;
-    window.location.reload();
-  } else {
-    setTimeout(checkRightMoveForNextUrl, 300);
+  if (previousUrl.includes("for-sale") || previousUrl.includes("to-rent")) {
+    if (window.location.href !== previousUrl) {
+      previousUrl = window.location.href;
+      window.location.reload();
+    } else {
+      setTimeout(checkRightMoveForNextUrl, 300);
+    }
   }
 }
 
