@@ -339,7 +339,7 @@ const right_move_listings = document.querySelectorAll(
 );
 
 right_move_listings.forEach((listing) => {
-  listing.style.margin = "0.5rem 0";
+  listing.style.margin = "0.75rem 0";
   const rightMoveListings = new RightMoveListings(listing);
   const listingData = new PropertyListings();
 
