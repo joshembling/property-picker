@@ -22,5 +22,10 @@
   ],
   "background": {
     "service_worker": "background.js"
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "{daf33bf7-a35e-3350-979c-91cf07323c2d}"
+    }
   }
 }
