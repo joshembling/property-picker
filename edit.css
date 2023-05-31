@@ -27,4 +27,14 @@
   outline: none;
   font-size: 0.8rem;
   cursor: pointer;
+  transition: 0.2s;
+}
+
+.filter-btn:hover {
+  opacity: 0.6 !important;
+  transition: 0.2s;
+}
+
+.hide {
+  display: none;
 }

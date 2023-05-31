@@ -1,6 +1,7 @@
 import PropertyListings from "./app/PropertyListings";
 import RightMoveListings from "./app/RightMoveListings";
 import ZooplaListings from "./app/ZooplaListings";
+import Filters from "./app/Filters";
 
 /**
  * LOADING LISTINGS FOR FORMATTING
@@ -51,7 +52,7 @@ right_move_listings.forEach((listing) => {
 
   rightMoveListings.changeListingTextToBlack();
   const price = rightMoveListings.getListingPrice();
-  console.log(price);
+
   const backgrounds = rightMoveListings.getListingBackgroundElements();
   const footerBackgrounds = rightMoveListings.getListingFooterElements();
 
@@ -94,65 +95,14 @@ zoopla_listings.forEach((listing) => {
   });
 });
 
-const title = document.querySelector('h1[data-testid="results-title"]');
+/**
+ * FILTERING
+ */
 
-const wrapper = document.createElement("div");
-wrapper.classList.add("btn-wrapper");
+if (window.location.href.indexOf("zoopla") != -1) {
+  new Filters('h1[data-testid="results-title"]');
+}
 
-title.parentElement.appendChild(wrapper);
-
-const results = [
-  {
-    text: "red",
-    colour: "#fe7f7f",
-    percentage: "0-49%",
-  },
-  {
-    text: "orange",
-    colour: "#fba436",
-    percentage: "50-64%",
-  },
-  {
-    text: "yellow",
-    colour: "#fcfbb8",
-    percentage: "65-69%",
-  },
-  {
-    text: "green",
-    colour: "#7cffa7",
-    percentage: "70-100%",
-  },
-];
-
-results.forEach((result) => {
-  let btn = document.createElement("button");
-  btn.classList.add("filter-btn");
-  btn.classList.add(result.text);
-  btn.textContent = result.percentage;
-  btn.style.cssText = `
-    background: ${result.colour};
-  `;
-
-  wrapper.appendChild(btn);
-});
-
-const filterBtns = document.querySelectorAll(".filter-btn");
-
-filterBtns.forEach((btn) => {
-  btn.addEventListener("click", (e) => {
-    const pills = document.querySelectorAll(`.pill.${e.target.classList[1]}`);
-
-    pills.forEach((pill) => {
-      if (
-        pill.parentElement.parentElement.style.display === "" ||
-        pill.parentElement.parentElement.style.display === "block"
-      ) {
-        e.target.style.opacity = "0.2";
-        pill.parentElement.parentElement.style.display = "none";
-      } else {
-        e.target.style.opacity = "1";
-        pill.parentElement.parentElement.style.display = "block";
-      }
-    });
-  });
-});
+if (window.location.href.indexOf("rightmove") != -1) {
+  new Filters("#keyword-search-container");
+}
