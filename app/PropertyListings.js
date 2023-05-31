@@ -81,15 +81,19 @@ class PropertyListings {
     if (this.percentage < 50) {
       pill.style.background = this.pills[0].colour;
       pill.textContent = this.pills[0].text;
+      pill.classList.add("red");
     } else if (this.percentage >= 50 && this.percentage < 65) {
       pill.style.background = this.pills[1].colour;
       pill.textContent = this.pills[1].text;
+      pill.classList.add("orange");
     } else if (this.percentage >= 65 && this.percentage < 70) {
       pill.style.background = this.pills[2].colour;
       pill.textContent = this.pills[2].text;
+      pill.classList.add("yellow");
     } else {
       pill.style.background = this.pills[3].colour;
       pill.textContent = this.pills[3].text;
+      pill.classList.add("green");
     }
   }
 

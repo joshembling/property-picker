@@ -15,3 +15,16 @@
   margin-right: 0.75rem;
   border: none;
 }
+
+.btn-wrapper {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.filter-btn {
+  padding: 0.25rem 0.75rem;
+  border: none;
+  outline: none;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
