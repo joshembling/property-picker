@@ -1,0 +1,11 @@
+{
+  "name": "your-extension",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "webpack --config webpack.config.js --watch"
+  },
+  "devDependencies": {
+    "webpack": "^5.50.0",
+    "webpack-cli": "^4.8.0"
+  }
+}
