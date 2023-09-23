@@ -1,5 +1,3 @@
-// webpack.config.js
-
 module.exports = {
   entry: {
     main: "./edit.js", // Entry point of your main script

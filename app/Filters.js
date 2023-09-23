@@ -107,23 +107,23 @@ class Filters {
       const colour = e.target.classList[1];
       const pills = document.querySelectorAll(`.pill.${colour}`);
 
-      //  pills.forEach((pill) => {
-      //    if (!pill.parentElement.parentElement.classList.contains("hide")) {
-      //      e.target.style.opacity = "0.2";
-      //      pill.parentElement.parentElement.classList.add("hide");
+      pills.forEach((pill) => {
+        if (!pill.parentElement.parentElement.classList.contains("hide")) {
+          e.target.style.opacity = "0.2";
+          pill.parentElement.parentElement.classList.add("hide");
 
-      //      chrome.storage.local.set({
-      //        [colour]: false,
-      //      });
-      //    } else {
-      //      e.target.style.opacity = "1";
-      //      pill.parentElement.parentElement.classList.remove("hide");
+          chrome.storage.local.set({
+            [colour]: false,
+          });
+        } else {
+          e.target.style.opacity = "1";
+          pill.parentElement.parentElement.classList.remove("hide");
 
-      //      chrome.storage.local.set({
-      //        [colour]: true,
-      //      });
-      //    }
-      //  });
+          chrome.storage.local.set({
+            [colour]: true,
+          });
+        }
+      });
     });
   }
 }
