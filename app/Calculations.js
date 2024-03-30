@@ -59,10 +59,10 @@ class Calculations {
     return parseInt(key1) && parseInt(key2)
       ? parseInt(key1) + parseInt(key2)
       : parseInt(key1) && !parseInt(key2)
-      ? parseInt(key1)
-      : !parseInt(key1) && parseInt(key2)
-      ? parseInt(key2)
-      : console.log(message);
+        ? parseInt(key1)
+        : !parseInt(key1) && parseInt(key2)
+          ? parseInt(key2)
+          : console.log('calc msg', message);
   }
 
   getCombinedAnnualSalary(items) {
