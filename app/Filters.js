@@ -1,3 +1,5 @@
+import DelayEnum from "./enums/Delay";
+
 class Filters {
   constructor(element) {
     this.element = document.querySelector(element);
@@ -29,8 +31,13 @@ class Filters {
       },
     ];
 
-    this.createElements();
-    this.filterFunctionality();
+    setTimeout(() => {
+      this.createElements();
+    }, DelayEnum.CREATE_FILTERS);
+
+    setTimeout(() => {
+      this.filterFunctionality();
+    }, DelayEnum.LOAD_FILTER_FUNCTIONALITY);
   }
 
   createElements() {
@@ -45,9 +52,9 @@ class Filters {
       btn.classList.add(result.textColour);
       btn.textContent = result.text;
       btn.style.cssText = `
-		background: ${result.colour};
-	  `;
-
+		    background: ${result.colour};
+	    `;
+      btn.style.fontFamily = 'inherit';
       wrapper.appendChild(btn);
     });
   }
@@ -63,11 +70,10 @@ class Filters {
   }
 
   formatButton(btn) {
-    chrome.storage.local.get(btn.classList[1], (items) => {
-      console.log(items);
-      const pills = document.querySelectorAll(`.pill.${btn.classList[1]}`);
 
-      if (items[btn.classList[1]] === false) {
+    chrome.storage.local.get(btn.classList[1], (items) => {
+      const pills = document.querySelectorAll(`.pill.${btn.classList[1]}`);
+      if (items[btn.classList[1]] == false) {
         btn.style.opacity = "0.2";
 
         pills.forEach((pill) => {
@@ -85,7 +91,6 @@ class Filters {
 
   handleButtonEvent(btn) {
     btn.addEventListener("click", (e) => {
-      console.log(e.target);
       if (e.target.style.opacity !== "0.2") {
         e.target.style.opacity = "0.2";
 
@@ -101,7 +106,7 @@ class Filters {
       }
 
       chrome.storage.local.get(btn.classList[1], (items) => {
-        console.log(items);
+        console.log('storage items', items);
       });
 
       const colour = e.target.classList[1];

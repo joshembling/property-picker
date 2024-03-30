@@ -3,6 +3,8 @@ import RightMoveListings from "./app/RightMoveListings";
 import ZooplaListings from "./app/ZooplaListings";
 import Filters from "./app/Filters";
 
+import DelayEnum from "./app/enums/Delay";
+
 /**
  * LOADING LISTINGS FOR FORMATTING
  */
@@ -12,12 +14,12 @@ function checkZooplaForNextUrl() {
   if (window.location.href !== previousUrl) {
     previousUrl = window.location.href;
     if (previousUrl.includes("__next")) {
-      setTimeout(checkZooplaForNextUrl, 100);
+      setTimeout(checkZooplaForNextUrl, DelayEnum.CHECK_URL_ZOOPLA);
     } else {
       window.location.reload();
     }
   } else {
-    setTimeout(checkZooplaForNextUrl, 100);
+    setTimeout(checkZooplaForNextUrl, DelayEnum.CHECK_URL_ZOOPLA);
   }
 }
 
@@ -27,7 +29,7 @@ function checkRightMoveForNextUrl() {
       previousUrl = window.location.href;
       window.location.reload();
     } else {
-      setTimeout(checkRightMoveForNextUrl, 300);
+      setTimeout(checkRightMoveForNextUrl, DelayEnum.CHECK_URL_RIGHTMOVE);
     }
   }
 }

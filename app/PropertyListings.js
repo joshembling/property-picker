@@ -1,6 +1,8 @@
 import Calculations from "./Calculations";
 const calculations = new Calculations();
 
+import DelayEnum from "./enums/Delay";
+
 class PropertyListings {
   constructor() {
     this.pills = [
@@ -45,13 +47,12 @@ class PropertyListings {
 
   getAffordabilityPercentage(index, pill) {
     if (index === 1)
-      pill.textContent = `Affordability rating: ${
-        this.percentage <= 0
-          ? "0%"
-          : this.percentage >= 100
+      pill.textContent = `Affordability rating: ${this.percentage <= 0
+        ? "0%"
+        : this.percentage >= 100
           ? "100%"
           : this.percentage + "%"
-      }`;
+        }`;
   }
 
   getEstimatedMonthlyPayment(index, mortgageAffordability, pill) {
@@ -136,7 +137,10 @@ class PropertyListings {
         listingDataCalculations.combinedMonthlySalary !== undefined
       ) {
         const wrapper = calculations.createElement("div", "pill-wrapper");
-        listing.prepend(wrapper);
+
+        setTimeout(() => {
+          listing.prepend(wrapper);
+        }, DelayEnum.LOAD_LISTINGS);
 
         this.pills.map((pill, index) => {
           let p = calculations.createElement("div", "pill");
