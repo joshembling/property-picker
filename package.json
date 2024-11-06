@@ -1,10 +1,12 @@
 {
-  "name": "your-extension",
+  "name": "property-picker",
   "version": "1.0.0",
   "scripts": {
     "start": "webpack --config webpack.config.js --watch"
   },
   "devDependencies": {
+    "@babel/preset-env": "^7.26.0",
+    "babel-loader": "^9.2.1",
     "webpack": "^5.50.0",
     "webpack-cli": "^4.8.0"
   }
