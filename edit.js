@@ -81,7 +81,7 @@ right_move_listings.forEach((listing) => {
  * ZOOPLA
  */
 const zoopla_listings = document.querySelectorAll(
-  'div[data-testid="regular-listings"] > div[id^="listing"]'
+  'div[data-testid="regular-listings"] > div > div[id^="listing"]'
 );
 
 zoopla_listings.forEach((listing) => {

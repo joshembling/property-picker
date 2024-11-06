@@ -25,7 +25,7 @@ class ZooplaListings {
 
   getListingBackgroundElements() {
     return this.listing.querySelectorAll(
-      "div > div > div:first-of-type > div:nth-child(2) > div:first-of-type > a:first-of-type > div:first-of-type"
+      "div > div > div:last-child"
     );
   }
 }
