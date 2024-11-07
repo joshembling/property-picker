@@ -2,12 +2,9 @@
   "name": "property-picker",
   "version": "1.0.0",
   "scripts": {
-    "start": "webpack --config webpack.config.js --watch"
+    "start": "npx esbuild ./edit.js --bundle --outfile=dist/bundle.js --minify --watch"
   },
   "devDependencies": {
-    "@babel/preset-env": "^7.26.0",
-    "babel-loader": "^9.2.1",
-    "webpack": "^5.50.0",
-    "webpack-cli": "^4.8.0"
+    "esbuild": "^0.24.0"
   }
 }
