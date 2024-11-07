@@ -64,15 +64,14 @@ class Filters {
 
     filterBtns.forEach((btn) => {
       this.formatButton(btn);
-
       this.handleButtonEvent(btn);
     });
   }
 
   formatButton(btn) {
-
     chrome.storage.local.get(btn.classList[1], (items) => {
       const pills = document.querySelectorAll(`.pill.${btn.classList[1]}`);
+
       if (items[btn.classList[1]] == false) {
         btn.style.opacity = "0.2";
 
