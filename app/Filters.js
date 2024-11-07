@@ -44,7 +44,8 @@ class Filters {
     const wrapper = document.createElement("div");
     wrapper.classList.add("btn-wrapper");
 
-    this.element.parentElement.appendChild(wrapper);
+    const parentElement = this.element.parentElement;
+    parentElement.insertBefore(wrapper, parentElement.children[1] || null);
 
     this.results.forEach((result) => {
       let btn = document.createElement("button");
