@@ -102,9 +102,9 @@ zoopla_listings.forEach((listing) => {
  */
 
 if (window.location.href.indexOf("zoopla") != -1) {
-  new Filters('div[data-testid="search-results-header-control"]');
+  new Filters('div[data-testid="search-results-header-control"]', 'zoopla');
 }
 
 if (window.location.href.indexOf("rightmove") != -1) {
-  new Filters("#keyword-search-container");
+  new Filters("#keyword-search-container", 'rightmove');
 }

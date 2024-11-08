@@ -1,8 +1,9 @@
 import DelayEnum from "./enums/Delay";
 
 class Filters {
-  constructor(element) {
+  constructor(element, provider) {
     this.element = document.querySelector(element);
+    this.provider = provider;
 
     this.results = [
       {
@@ -77,13 +78,17 @@ class Filters {
         btn.style.opacity = "0.2";
 
         pills.forEach((pill) => {
-          pill.parentElement.parentElement.classList.add("hide");
+          this.provider === 'zoopla' ?
+            pill.parentElement.parentElement.parentElement.classList.add("hide") :
+            pill.parentElement.parentElement.classList.add("hide");
         });
       } else {
         btn.style.opacity = "1";
 
         pills.forEach((pill) => {
-          pill.parentElement.parentElement.classList.remove("hide");
+          this.provider === 'zoopla' ?
+            pill.parentElement.parentElement.parentElement.classList.remove("hide") :
+            pill.parentElement.parentElement.classList.remove("hide");
         });
       }
     });
@@ -91,6 +96,11 @@ class Filters {
 
   handleButtonEvent(btn) {
     btn.addEventListener("click", (e) => {
+      chrome.storage.local.get(btn.classList[1], (items) => {
+        console.log('storage items', items);
+      });
+
+      const colour = e.target.classList[1];
       if (e.target.style.opacity !== "0.2") {
         e.target.style.opacity = "0.2";
 
@@ -105,28 +115,41 @@ class Filters {
         });
       }
 
-      chrome.storage.local.get(btn.classList[1], (items) => {
-        console.log('storage items', items);
-      });
-
-      const colour = e.target.classList[1];
       const pills = document.querySelectorAll(`.pill.${colour}`);
 
       pills.forEach((pill) => {
-        if (!pill.parentElement.parentElement.classList.contains("hide")) {
-          e.target.style.opacity = "0.2";
-          pill.parentElement.parentElement.classList.add("hide");
+        if (this.provider === 'zoopla') {
+          if (!pill.parentElement.parentElement.parentElement.classList.contains("hide")) {
+            e.target.style.opacity = "0.2";
+            pill.parentElement.parentElement.parentElement.classList.add("hide");
 
-          chrome.storage.local.set({
-            [colour]: false,
-          });
+            chrome.storage.local.set({
+              [colour]: false,
+            });
+          } else {
+            e.target.style.opacity = "1";
+            pill.parentElement.parentElement.parentElement.classList.remove("hide");
+
+            chrome.storage.local.set({
+              [colour]: true,
+            });
+          }
         } else {
-          e.target.style.opacity = "1";
-          pill.parentElement.parentElement.classList.remove("hide");
+          if (!pill.parentElement.parentElement.classList.contains("hide")) {
+            e.target.style.opacity = "0.2";
+            pill.parentElement.parentElement.classList.add("hide");
 
-          chrome.storage.local.set({
-            [colour]: true,
-          });
+            chrome.storage.local.set({
+              [colour]: false,
+            });
+          } else {
+            e.target.style.opacity = "1";
+            pill.parentElement.parentElement.classList.remove("hide");
+
+            chrome.storage.local.set({
+              [colour]: true,
+            });
+          }
         }
       });
     });
